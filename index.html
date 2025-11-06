@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Smarttv ver 7 </title><meta name="title" content="Smarttv ver 7 "><meta name="description" content="With music, video, YouTube "><meta charset="UTF-8">
+<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Autopilot smarttv ver 7 </title><meta name="title" content="Autopilot smarttv ver 7 "><meta name="description" content="Update "><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="./style.css"><script src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js" async=""></script><script type="importmap">{
   "imports": {}
 }</script></head><body>
@@ -546,6 +546,26 @@
             }
         }
 
+        function setMuteState(shouldMute) {
+            isMuted = shouldMute;
+            document.getElementById('unmuted-icon').classList.toggle('hidden', isMuted);
+            document.getElementById('muted-icon').classList.toggle('hidden', !isMuted);
+
+            audioPlayer.muted = isMuted;
+
+            if (ytPlayer && typeof ytPlayer.mute === 'function') {
+                if (isMuted) {
+                    ytPlayer.mute();
+                } else {
+                    ytPlayer.unMute();
+                }
+            }
+
+            if (isMuted) {
+                speechSynthesis.cancel();
+            }
+        }
+
         // --- YouTube Player Logic ---
         window.onYouTubeIframeAPIReady = function() {
             // This function is called when the API is ready.
@@ -553,6 +573,11 @@
         };
 
         function initializeYouTubePlayer(videoId) {
+            // Destroy the old player if it exists, to ensure new settings are applied
+            if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+                ytPlayer.destroy();
+                ytPlayer = null;
+            }
             ytPlayer = new YT.Player('youtube-player', {
                 height: '100%',
                 width: '100%',
@@ -564,10 +589,21 @@
                     'showinfo': 0,
                     'modestbranding': 1,
                     'loop': 1,
-                    'playlist': videoId // Required for looping
+                    'playlist': videoId, // Required for looping
+                    'mute': isMuted ? 1 : 0
                 },
                 events: {
-                    'onReady': (event) => event.target.playVideo()
+                    'onReady': (event) => {
+                         // The mute state is already set in playerVars, so just play.
+                        event.target.playVideo();
+                    },
+                    'onStateChange': (event) => {
+                        // If the video ends and loop is on, it will replay.
+                        // If for some reason it gets cued, we play it.
+                        if (event.data === YT.PlayerState.CUED) {
+                             event.target.playVideo();
+                        }
+                    }
                 }
             });
         }
@@ -586,15 +622,7 @@
 
                 const muteBtn = document.getElementById('mute-btn');
                 muteBtn.addEventListener('click', () => {
-                    isMuted = !isMuted;
-                    document.getElementById('unmuted-icon').classList.toggle('hidden', isMuted);
-                    document.getElementById('muted-icon').classList.toggle('hidden', !isMuted);
-                    if (isMuted) {
-                        speechSynthesis.cancel();
-                        audioPlayer.muted = true;
-                    } else {
-                        audioPlayer.muted = false;
-                    }
+                    setMuteState(!isMuted);
                 });
                 
                 const today = getTodayDateString();
@@ -686,7 +714,7 @@
                     switch (data.command) {
                         case 'play':
                             youtubeOverlay.classList.add('hidden');
-                            if (ytPlayer) ytPlayer.stopVideo();
+                            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
                             tokenDisplayContainer.classList.add('hidden');
                             videoOverlay.classList.remove('hidden');
                             if (tvVideoPlayer.src !== data.videoUrl) {
@@ -699,23 +727,24 @@
                              tvVideoPlayer.pause();
                              tokenDisplayContainer.classList.add('hidden');
                              youtubeOverlay.classList.remove('hidden');
-                             if (ytPlayer) {
-                                 ytPlayer.loadVideoById(data.videoId);
-                             } else {
-                                 initializeYouTubePlayer(data.videoId);
-                             }
+                             initializeYouTubePlayer(data.videoId);
                              break;
                         case 'pause':
                             tvVideoPlayer.pause();
-                            if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+                            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
                             break;
                         case 'stop':
                             tvVideoPlayer.pause();
                             tvVideoPlayer.src = '';
                             videoOverlay.classList.add('hidden');
-                            if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+                            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
                             youtubeOverlay.classList.add('hidden');
                             tokenDisplayContainer.classList.remove('hidden');
+                            break;
+                        case 'set_mute':
+                            if (typeof data.isMuted === 'boolean') {
+                                setMuteState(data.isMuted);
+                            }
                             break;
                     }
                 });
