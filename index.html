@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Autopilot smarttv ver 7 </title><meta name="title" content="Autopilot smarttv ver 7 "><meta name="description" content="Update "><meta charset="UTF-8">
+<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Smart tv 7</title><meta name="title" content="Smart tv 7"><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="./style.css"><script src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js" async=""></script><script type="importmap">{
   "imports": {}
 }</script></head><body>
@@ -182,6 +182,17 @@
         </svg>
     </button>
     
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]">
+        <div class="text-center text-white">
+            <svg class="animate-spin h-12 w-12 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="text-xl font-semibold">Loading Video...</p>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyC0_DQIiyaVQllFH4pxH1Dm3r2kFXXoOgc",
@@ -225,6 +236,7 @@
         const videoOverlay = document.getElementById('video-overlay');
         const tvVideoPlayer = document.getElementById('tv-video-player');
         const youtubeOverlay = document.getElementById('youtube-overlay');
+        const loadingOverlay = document.getElementById('loading-overlay');
 
 
         // --- Canned Announcement Texts ---
@@ -590,15 +602,19 @@
                     'modestbranding': 1,
                     'loop': 1,
                     'playlist': videoId, // Required for looping
-                    'mute': isMuted ? 1 : 0
+                    'mute': 1 // Always start muted to guarantee autoplay
                 },
                 events: {
                     'onReady': (event) => {
-                         // The mute state is already set in playerVars, so just play.
                         event.target.playVideo();
+                        if (!isMuted) {
+                            event.target.unMute();
+                        }
                     },
                     'onStateChange': (event) => {
-                        // If the video ends and loop is on, it will replay.
+                        if (event.data === YT.PlayerState.PLAYING) {
+                            loadingOverlay.classList.add('hidden');
+                        }
                         // If for some reason it gets cued, we play it.
                         if (event.data === YT.PlayerState.CUED) {
                              event.target.playVideo();
@@ -623,6 +639,10 @@
                 const muteBtn = document.getElementById('mute-btn');
                 muteBtn.addEventListener('click', () => {
                     setMuteState(!isMuted);
+                });
+                
+                tvVideoPlayer.addEventListener('playing', () => {
+                    loadingOverlay.classList.add('hidden');
                 });
                 
                 const today = getTodayDateString();
@@ -713,16 +733,31 @@
 
                     switch (data.command) {
                         case 'play':
-                            youtubeOverlay.classList.add('hidden');
-                            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
-                            tokenDisplayContainer.classList.add('hidden');
-                            videoOverlay.classList.remove('hidden');
-                            if (tvVideoPlayer.src !== data.videoUrl) {
-                                tvVideoPlayer.src = data.videoUrl;
+                            loadingOverlay.classList.remove('hidden');
+                            // Handles both initial play for LOCAL video and RESUMING for ANY video.
+                            if (data.videoUrl) { // This is an initial play command for a local video
+                                youtubeOverlay.classList.add('hidden');
+                                if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
+                                tokenDisplayContainer.classList.add('hidden');
+                                videoOverlay.classList.remove('hidden');
+                                if (tvVideoPlayer.src !== data.videoUrl) {
+                                    tvVideoPlayer.src = data.videoUrl;
+                                }
+                                tvVideoPlayer.play();
+                            } else { // This is a resume command
+                                if (!youtubeOverlay.classList.contains('hidden')) {
+                                    // If YouTube overlay is visible, play the YouTube video
+                                    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                                        ytPlayer.playVideo();
+                                    }
+                                } else if (!videoOverlay.classList.contains('hidden')) {
+                                    // If local video overlay is visible, play the local video
+                                    tvVideoPlayer.play();
+                                }
                             }
-                            tvVideoPlayer.play();
                             break;
                         case 'play_youtube':
+                             loadingOverlay.classList.remove('hidden');
                              videoOverlay.classList.add('hidden');
                              tvVideoPlayer.pause();
                              tokenDisplayContainer.classList.add('hidden');
@@ -734,6 +769,7 @@
                             if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
                             break;
                         case 'stop':
+                            loadingOverlay.classList.add('hidden');
                             tvVideoPlayer.pause();
                             tvVideoPlayer.src = '';
                             videoOverlay.classList.add('hidden');
