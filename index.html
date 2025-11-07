@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Smart tv 7</title><meta name="title" content="Smart tv 7"><meta charset="UTF-8">
+<html lang="en" class=""><head><script>window.livecodes = window.livecodes || {};</script><title>Final smarttv</title><meta name="title" content="Final smarttv"><meta name="description" content="Fully control "><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="./style.css"><script src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js" async=""></script><script type="importmap">{
   "imports": {}
 }</script></head><body>
@@ -82,83 +82,103 @@
             to { transform: translateY(-50%); }
         }
         .animate-scroll-up {
-            /* Adjust duration based on list length in JS if needed */
             animation: scroll-up 30s linear infinite;
+        }
+
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 500ms;
         }
     </style>
 
 
-    <div id="token-display-container" class="contents">
-        <audio id="music-player" crossorigin="anonymous"></audio>
+    <audio id="music-player" crossorigin="anonymous"></audio>
 
-        <!-- News Ticker / Marquee -->
-        <header id="marquee-container" class="w-full bg-gray-900 py-3 overflow-hidden whitespace-nowrap border-b-2 border-indigo-500/30 text-lg">
-            <div id="marquee-text" class="inline-block">
-                <!-- Customer data will be injected here by JavaScript -->
-            </div>
-        </header>
-
-        <!-- Main Display Area (Top Section) -->
-        <main class="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div id="serving-display" class="w-full rounded-lg transition-opacity duration-500">
-                <h1 class="text-[clamp(2rem,6vh,4rem)] font-bold uppercase tracking-widest text-indigo-400">Now Serving</h1>
-                <p id="serving-token" class="digital-font text-[clamp(8rem,30vh,20rem)] font-black my-4 text-white leading-none">-</p>
-                <p id="serving-name" class="text-[clamp(2rem,7vh,5rem)] font-bold text-gray-300">-</p>
-            </div>
-            
-            <div id="no-serving-message" class="hidden text-center text-[clamp(2rem,6vh,4rem)] text-gray-500">
-                <p>Waiting for the next customer...</p>
-            </div>
-        </main>
-        
-        <!-- Footer Area (Bottom Section) -->
-        <footer class="w-full bg-gray-900/50 p-6 border-t border-gray-800 grid grid-cols-1 md:grid-cols-5 gap-6 relative">
-            <!-- Up Next List -->
-            <div class="md:col-span-1">
-                <h2 class="text-2xl font-bold text-yellow-400 border-b-2 border-yellow-400/50 pb-2 mb-4 text-center">Up Next</h2>
-                <div class="h-48 overflow-hidden relative">
-                    <ul id="next-up-list" class="footer-list space-y-2 absolute top-0 left-0 w-full">
-                        <!-- Waiting customers (from 2nd onwards) will be injected here -->
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- On Deck Display (Center) -->
-            <div id="on-deck-display" class="md:col-span-3 flex flex-col items-center justify-center text-center rounded-lg transition-opacity duration-500">
-                <h2 class="text-[clamp(1.5rem,4vh,2.5rem)] font-bold uppercase tracking-widest text-yellow-400">On Deck</h2>
-                <p id="on-deck-token" class="digital-font text-[clamp(4rem,10vh,8rem)] font-black my-1 text-white leading-none">-</p>
-                <p id="on-deck-name" class="text-[clamp(1.5rem,4vh,2.5rem)] font-bold text-gray-300">-</p>
-                 <div id="on-deck-eta-container" class="hidden flex items-center justify-center gap-6 mt-2">
-                    <div class="flex items-center space-x-3">
-                        <div id="light-red" class="light"></div>
-                        <div id="light-yellow" class="light"></div>
-                        <div id="light-green" class="light"></div>
+    <div id="main-container" class="w-full h-full flex hidden">
+        <!-- Token Display container -->
+        <div id="token-container">
+            <div id="token-display-container" class="flex flex-col h-full">
+                <!-- News Ticker / Marquee -->
+                <header id="marquee-container" class="w-full bg-gray-900 py-3 overflow-hidden whitespace-nowrap border-b-2 border-indigo-500/30 text-lg">
+                    <div id="marquee-text" class="inline-block">
+                        <!-- Customer data will be injected here by JavaScript -->
                     </div>
-                    <p id="on-deck-eta-display" class="text-[clamp(2rem,6vh,4rem)] digital-font tracking-widest text-white"></p>
-                </div>
-                 <div id="no-one-waiting-message" class="hidden text-center text-lg text-gray-500 mt-4">
-                    <p>Queue is empty.</p>
-                </div>
-            </div>
-            
-            <!-- Recently Called List -->
-            <div class="md:col-span-1">
-                <h2 class="text-2xl font-bold text-green-400 border-b-2 border-green-400/50 pb-2 mb-4 text-center">Recently Called</h2>
-                <div class="h-48 overflow-hidden relative opacity-75">
-                    <ul id="recent-list" class="footer-list space-y-2 absolute top-0 left-0 w-full">
-                        <!-- Recently called customers will be injected here -->
-                    </ul>
-                </div>
-            </div>
+                </header>
 
-            <!-- Now Playing Banner -->
-            <div id="now-playing-banner" class="hidden absolute bottom-0 left-0 right-0 bg-black/50 p-2 text-center text-white transition-transform duration-300 translate-y-full">
-                <p class="flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V4a1 1 0 00-.804-.98l-10-2z"></path></svg>
-                    <span id="now-playing-text"></span>
-                </p>
+                <!-- Main Display Area (On Deck, Up Next, etc.) -->
+                <div class="flex-1 flex items-center justify-center p-2 md:p-6">
+                    <footer class="w-full bg-gray-900/50 grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 relative">
+                        <!-- Up Next List -->
+                        <div class="md:col-span-1 hidden md:block">
+                            <h2 class="text-xl md:text-2xl font-bold text-yellow-400 border-b-2 border-yellow-400/50 pb-2 mb-4 text-center">Up Next</h2>
+                            <div class="h-48 overflow-hidden relative">
+                                <ul id="next-up-list" class="footer-list space-y-2 absolute top-0 left-0 w-full"></ul>
+                            </div>
+                        </div>
+                        
+                        <!-- On Deck Display (Center) -->
+                        <div id="on-deck-display" class="md:col-span-3 flex flex-col items-center justify-center text-center rounded-lg transition-opacity duration-500">
+                            <h2 class="text-[clamp(1.5rem,4vh,2.5rem)] font-bold uppercase tracking-widest text-yellow-400">On Deck</h2>
+                            <p id="on-deck-token" class="digital-font text-[clamp(4rem,10vh,8rem)] font-black my-1 text-white leading-none">-</p>
+                            <p id="on-deck-name" class="text-[clamp(1.5rem,4vh,2.5rem)] font-bold text-gray-300">-</p>
+                             <div id="on-deck-eta-container" class="hidden flex items-center justify-center gap-6 mt-2">
+                                <div class="flex items-center space-x-3">
+                                    <div id="light-red" class="light"></div>
+                                    <div id="light-yellow" class="light"></div>
+                                    <div id="light-green" class="light"></div>
+                                </div>
+                                <p id="on-deck-eta-display" class="text-[clamp(2rem,6vh,4rem)] digital-font tracking-widest text-white"></p>
+                            </div>
+                             <div id="no-one-waiting-message" class="hidden text-center text-lg text-gray-500 mt-4">
+                                <p>Queue is empty.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Recently Called List -->
+                        <div class="md:col-span-1 hidden md:block">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-400 border-b-2 border-green-400/50 pb-2 mb-4 text-center">Recently Called</h2>
+                            <div class="h-48 overflow-hidden relative opacity-75">
+                                <ul id="recent-list" class="footer-list space-y-2 absolute top-0 left-0 w-full"></ul>
+                            </div>
+                        </div>
+
+                        <!-- Now Playing Banner -->
+                        <div id="now-playing-banner" class="hidden absolute bottom-0 left-0 right-0 bg-black/50 p-2 text-center text-white transition-transform duration-300 translate-y-full">
+                            <p class="flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V4a1 1 0 00-.804-.98l-10-2z"></path></svg>
+                                <span id="now-playing-text"></span>
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+                
+                <!-- Bottom "Now Serving" Bar -->
+                <main class="w-full bg-gray-900 py-3 border-t-2 border-indigo-500/30">
+                    <div id="serving-display" class="w-full max-w-5xl mx-auto flex items-center justify-center gap-x-12 px-4">
+                         <div class="text-left">
+                            <h1 class="text-xl font-bold uppercase tracking-widest text-indigo-400">Now Serving</h1>
+                            <p id="serving-name" class="text-3xl font-bold text-gray-300">-</p>
+                        </div>
+                        <p id="serving-token" class="digital-font text-8xl font-black text-white leading-none">-</p>
+                    </div>
+                    
+                    <div id="no-serving-message" class="hidden text-center text-xl text-gray-500 py-8">
+                        <p>Waiting for the next customer...</p>
+                    </div>
+                </main>
             </div>
-        </footer>
+        </div>
+        <!-- YouTube Player container -->
+        <div id="youtube-container">
+            <div id="youtube-player" class="w-full h-full"></div>
+        </div>
+    </div>
+
+    <!-- Home Screen Overlay -->
+    <div id="home-screen-view" class="fixed inset-0 flex flex-col items-center justify-center z-40 text-center p-8" style="background: radial-gradient(circle, rgba(19,26,48,1) 0%, rgba(3,7,22,1) 100%);">
+        <div id="clock" class="digital-font text-8xl md:text-9xl font-black text-white mb-4">00:00:00</div>
+        <p class="text-2xl md:text-3xl text-gray-400">Waiting for content from reception...</p>
     </div>
     
     <!-- Video Player Overlay -->
@@ -166,13 +186,8 @@
         <video id="tv-video-player" class="w-full h-full"></video>
     </div>
 
-    <!-- YouTube Player Overlay -->
-    <div id="youtube-overlay" class="hidden fixed inset-0 bg-black flex items-center justify-center z-50">
-        <div id="youtube-player" class="w-full h-full"></div>
-    </div>
-
     <!-- Mute/Unmute Button -->
-    <button id="mute-btn" class="fixed bottom-4 right-4 bg-white p-3 rounded-full shadow-lg z-50 hover:bg-gray-200 transition-colors">
+    <button id="mute-btn" class="fixed bottom-4 right-4 bg-white p-3 rounded-full shadow-lg z-[60] hover:bg-gray-200 transition-colors">
         <svg id="unmuted-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
         </svg>
@@ -182,17 +197,6 @@
         </svg>
     </button>
     
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]">
-        <div class="text-center text-white">
-            <svg class="animate-spin h-12 w-12 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p class="text-xl font-semibold">Loading Video...</p>
-        </div>
-    </div>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyC0_DQIiyaVQllFH4pxH1Dm3r2kFXXoOgc",
@@ -208,45 +212,35 @@
         let countdownInterval = null;
         let serverTimeOffset = 0;
         let audioPlayer;
-        let lastMediaCommandTimestamp = 0; // To prevent re-triggering on reload
+        let lastMediaCommandTimestamp = 0;
+        let lastSmartTvCommandTimestamp = 0;
         let globalQueue = [];
-        let autopilotInterval = null;
-        let autopilotConfig = { enabled: false, serviceTime: 5 * 60 * 1000 };
         let ytPlayer = null;
+        let isApiReady = false;
+        let currentYtState = {}; // Tracks the current state of the YT Player on this screen
+        let clockInterval = null;
+        let currentLayout = 'home'; // 'home', 'token_only', 'split', 'full_tv', 'local_video'
 
         // --- UI Element References ---
+        const mainContainer = document.getElementById('main-container');
+        const youtubeContainer = document.getElementById('youtube-container');
+        const tokenContainer = document.getElementById('token-container');
         const servingTokenEl = document.getElementById('serving-token');
         const servingNameEl = document.getElementById('serving-name');
         const servingDisplayEl = document.getElementById('serving-display');
         const noServingMessageEl = document.getElementById('no-serving-message');
         const marqueeTextEl = document.getElementById('marquee-text');
-        
-        // Footer elements
         const nextUpListEl = document.getElementById('next-up-list');
         const recentListEl = document.getElementById('recent-list');
-        const onDeckDisplayEl = document.getElementById('on-deck-display');
         const onDeckTokenEl = document.getElementById('on-deck-token');
         const onDeckNameEl = document.getElementById('on-deck-name');
         const onDeckEtaContainerEl = document.getElementById('on-deck-eta-container');
         const onDeckEtaDisplayEl = document.getElementById('on-deck-eta-display');
         const noOneWaitingMessageEl = document.getElementById('no-one-waiting-message');
-
-        // Video Player elements
-        const tokenDisplayContainer = document.getElementById('token-display-container');
+        const homeScreenView = document.getElementById('home-screen-view');
+        const clockEl = document.getElementById('clock');
         const videoOverlay = document.getElementById('video-overlay');
         const tvVideoPlayer = document.getElementById('tv-video-player');
-        const youtubeOverlay = document.getElementById('youtube-overlay');
-        const loadingOverlay = document.getElementById('loading-overlay');
-
-
-        // --- Canned Announcement Texts ---
-        const announcementTexts = {
-            'keepQuiet': {
-                'en-IN': "Attention please, kindly maintain silence. Other customers are being disturbed.",
-                'hi-IN': "कृपया ध्यान दें, शांति बनाए रखें। बाकी ग्राहकों को परेशानी हो रही है।",
-                'pa-IN': "ਕਿਰਪਾ ਕਰਕੇ ਧਿਆਨ ਦਿਓ, ਸ਼ਾਂਤੀ ਬਣਾਈ ਰੱਖੋ। ਦੂਜੇ ਗਾਹਕਾਂ ਨੂੰ ਪ੍ਰੇਸ਼ਾਨੀ ਹੋ ਰਹੀ ਹੈ।"
-            }
-        };
 
         // --- Utility Functions ---
         const getTodayDateString = () => new Date().toISOString().slice(0, 10);
@@ -254,68 +248,26 @@
             if (typeof unsafe !== 'string') return unsafe;
             return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         };
-        const formatEta = (etaTimestamp) => {
-            if (!etaTimestamp) return '';
-            const now = new Date().getTime() + serverTimeOffset;
-            const distance = etaTimestamp - now;
-            if (distance < 0) return 'Now';
-            const minutes = Math.floor(distance / (1000 * 60));
-            if (minutes < 1) return '< 1 min';
-            return `~${minutes} min`;
-        };
         
         // --- Core Functions ---
         function speak(tokenNumber, customerName) {
             if (isMuted || !('speechSynthesis' in window)) return;
-            
             const wasPlaying = audioPlayer && !audioPlayer.paused;
             if (wasPlaying) audioPlayer.pause();
-            
             speechSynthesis.cancel();
             
             const textToSpeak = `Token number ${tokenNumber}, ${customerName}, please proceed to the counter.`;
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'en-IN';
             utterance.rate = 0.9;
-
             utterance.onend = () => {
                 if (wasPlaying) audioPlayer.play().catch(e => console.error("Audio resume failed", e));
             };
-
             speechSynthesis.speak(utterance);
-        }
-
-        function playCannedAnnouncement(key) {
-            if (isMuted || !('speechSynthesis' in window) || !announcementTexts[key]) return;
-
-            const wasPlaying = audioPlayer && !audioPlayer.paused;
-            if (wasPlaying) audioPlayer.pause();
-
-            speechSynthesis.cancel();
-
-            const allLangs = ['hi-IN', 'pa-IN', 'en-IN'];
-            const utterances = [];
-            allLangs.forEach(lang => {
-                const text = announcementTexts[key][lang];
-                if (text) {
-                    const u = new SpeechSynthesisUtterance(text);
-                    u.lang = lang;
-                    u.rate = 0.9;
-                    utterances.push(u);
-                }
-            });
-            
-            if (utterances.length > 0) {
-                utterances[utterances.length - 1].onend = () => {
-                    if (wasPlaying) audioPlayer.play().catch(e => console.error("Audio resume failed", e));
-                };
-                utterances.forEach(u => speechSynthesis.speak(u));
-            }
         }
 
         function updateCountdown(eta) {
             if (countdownInterval) clearInterval(countdownInterval);
-            
             if (!eta) {
                 onDeckEtaContainerEl.classList.add('hidden');
                 return;
@@ -323,47 +275,92 @@
             onDeckEtaContainerEl.classList.remove('hidden');
 
             const update = () => {
-                const lightRed = document.getElementById('light-red');
-                const lightYellow = document.getElementById('light-yellow');
-                const lightGreen = document.getElementById('light-green');
-
-                const now = new Date().getTime() + serverTimeOffset;
-                const distance = eta - now;
-
-                lightRed.classList.remove('red');
-                lightYellow.classList.remove('yellow');
-                lightGreen.classList.remove('green');
+                const distance = eta - (new Date().getTime() + serverTimeOffset);
+                document.getElementById('light-red').classList.remove('red');
+                document.getElementById('light-yellow').classList.remove('yellow');
+                document.getElementById('light-green').classList.remove('green');
 
                 if (distance < 0) {
                     clearInterval(countdownInterval);
                     onDeckEtaDisplayEl.textContent = 'SOON';
-                    lightGreen.classList.add('green');
+                    document.getElementById('light-green').classList.add('green');
                     return;
                 }
-                const minutes = Math.floor(distance / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const minutes = Math.floor(distance / 60000);
+                const seconds = Math.floor((distance % 60000) / 1000);
                 onDeckEtaDisplayEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
-                if (minutes > 5) {
-                    lightRed.classList.add('red');
-                } else if (minutes >= 1) {
-                    lightYellow.classList.add('yellow');
-                } else {
-                    lightGreen.classList.add('green');
-                }
+                if (minutes > 5) document.getElementById('light-red').classList.add('red');
+                else if (minutes >= 1) document.getElementById('light-yellow').classList.add('yellow');
+                else document.getElementById('light-green').classList.add('green');
             };
             update();
             countdownInterval = setInterval(update, 1000);
         }
+        
+        function setView(layout) {
+            if (currentLayout === layout) return;
+            currentLayout = layout;
+
+            homeScreenView.classList.add('hidden');
+            mainContainer.classList.add('hidden');
+            videoOverlay.classList.add('hidden');
+            mainContainer.classList.remove('flex-col');
+            tokenContainer.className = '';
+            youtubeContainer.className = '';
+
+            if (layout !== 'local_video' && tvVideoPlayer.src) {
+                tvVideoPlayer.pause();
+                tvVideoPlayer.src = '';
+            }
+             if (layout !== 'split' && layout !== 'full_tv') {
+                if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+                    ytPlayer.destroy();
+                    ytPlayer = null;
+                }
+            }
+
+
+            switch(layout) {
+                case 'home':
+                    homeScreenView.classList.remove('hidden');
+                    break;
+                case 'token_only':
+                    mainContainer.classList.remove('hidden');
+                    tokenContainer.className = 'w-full h-full overflow-hidden shrink-0 transition-all';
+                    youtubeContainer.className = 'w-0 h-0 overflow-hidden shrink-0 transition-all';
+                    break;
+                case 'split':
+                    mainContainer.classList.remove('hidden');
+                    mainContainer.classList.add('flex-col');
+                    tokenContainer.className = 'w-full h-1/2 overflow-hidden shrink-0 transition-all';
+                    youtubeContainer.className = 'w-full h-1/2 bg-black overflow-hidden shrink-0 transition-all';
+                    break;
+                case 'full_tv':
+                    mainContainer.classList.remove('hidden');
+                    tokenContainer.className = 'w-0 h-0 overflow-hidden shrink-0 transition-all';
+                    youtubeContainer.className = 'w-full h-full bg-black overflow-hidden shrink-0 transition-all';
+                    break;
+                case 'local_video':
+                    videoOverlay.classList.remove('hidden');
+                    break;
+            }
+        }
+
 
         function updateDisplay(queue) {
-            // Find current serving customer
             const servingCustomer = queue.find(c => c.status === 'Serving');
-            
+            const waitingCustomers = queue.filter(c => c.status === 'Waiting').sort((a,b) => (a.priority === 'high' && b.priority !== 'high') ? -1 : (b.priority === 'high' && a.priority !== 'high') ? 1 : a.tokenNumber - b.tokenNumber);
+
+            const hasActiveCustomers = servingCustomer || waitingCustomers.length > 0;
+            if (currentLayout === 'home' && hasActiveCustomers) {
+                setView('token_only');
+            } else if (currentLayout === 'token_only' && !hasActiveCustomers && !ytPlayer) {
+                setView('home');
+            }
+
             if (servingCustomer) {
                 servingDisplayEl.classList.remove('hidden');
                 noServingMessageEl.classList.add('hidden');
-                
                 if (servingTokenEl.textContent !== String(servingCustomer.tokenNumber)) {
                     servingTokenEl.textContent = servingCustomer.tokenNumber;
                     servingNameEl.textContent = escapeHtml(servingCustomer.customerName);
@@ -373,7 +370,6 @@
                         servingTokenEl.classList.remove('highlight-update');
                         servingNameEl.classList.remove('highlight-update');
                     }, 1200);
-
                     if (lastServingToken !== servingCustomer.tokenNumber) {
                         speak(servingCustomer.tokenNumber, servingCustomer.customerName);
                         lastServingToken = servingCustomer.tokenNumber;
@@ -386,20 +382,10 @@
                 servingNameEl.textContent = '-';
             }
             
-            // Filter for waiting list (and sort by priority then token number)
-            const waitingCustomers = queue
-                .filter(c => c.status === 'Waiting')
-                .sort((a,b) => {
-                    if (a.priority === 'high' && b.priority !== 'high') return -1;
-                    if (b.priority === 'high' && a.priority !== 'high') return 1;
-                    return a.tokenNumber - b.tokenNumber;
-                });
-            
             const onDeckCustomer = waitingCustomers[0];
-            const nextUpCustomers = waitingCustomers.slice(1, 6); // next 5 after the on-deck one
+            const nextUpCustomers = waitingCustomers.slice(1, 6);
 
             if (onDeckCustomer) {
-                onDeckDisplayEl.classList.remove('hidden');
                 noOneWaitingMessageEl.classList.add('hidden');
                 onDeckTokenEl.textContent = onDeckCustomer.tokenNumber;
                 onDeckNameEl.textContent = escapeHtml(onDeckCustomer.customerName);
@@ -410,381 +396,247 @@
                 noOneWaitingMessageEl.classList.remove('hidden');
                 updateCountdown(null);
             }
-                
-            // Update Next Up List
-            const nextUpHTML = nextUpCustomers.map((c, index) => {
-                const etaDisplay = index === 0 ? `<span class="text-lg font-medium text-yellow-300 digital-font">${formatEta(c.eta)}</span>` : '';
-                return `<li class="flex justify-between items-center text-xl p-2 rounded-lg">
-                    <div class="flex items-center gap-4">
-                        <span class="font-bold text-2xl w-12 text-center">${c.tokenNumber}</span>
-                        <span class="font-semibold">${escapeHtml(c.customerName)}</span>
-                        ${c.priority === 'high' ? '<span class="text-xs font-bold uppercase bg-red-500 text-white px-2 py-1 rounded-full">P</span>' : ''}
-                    </div>
-                    ${etaDisplay}
-                 </li>`
-            }).join('');
-            nextUpListEl.innerHTML = nextUpHTML.repeat(2); // Repeat for seamless scroll
+            
+            nextUpListEl.innerHTML = nextUpCustomers.map(c => `<li class="flex justify-between items-center text-xl p-2 rounded-lg"><div class="flex items-center gap-4"><span class="font-bold text-2xl w-12 text-center">${c.tokenNumber}</span><span class="font-semibold">${escapeHtml(c.customerName)}</span></div></li>`).join('').repeat(2);
             nextUpListEl.classList.toggle('animate-scroll-up', nextUpCustomers.length > 3);
 
-            // Filter for recently called list
-            const recentCustomers = queue
-                .filter(c => ['Completed', 'Missed'].includes(c.status))
-                .sort((a, b) => (b.servingTimestamp || b.timestamp) - (a.servingTimestamp || a.timestamp)) // Sort by most recent
-                .slice(0, 5);
-            
-            const recentHTML = recentCustomers.map(c => 
-                `<li class="flex justify-between items-center text-lg p-2 rounded-lg">
-                    <span class="font-bold text-xl">${c.tokenNumber}</span>
-                    <span>${escapeHtml(c.customerName)}</span>
-                    <span class="text-sm ${c.status === 'Missed' ? 'text-orange-400' : 'text-gray-400'}">${c.status}</span>
-                 </li>`
-            ).join('');
-            recentListEl.innerHTML = recentHTML.repeat(2); // Repeat for seamless scroll
+            const recentCustomers = queue.filter(c => ['Completed', 'Missed'].includes(c.status)).sort((a, b) => (b.servingTimestamp || b.timestamp) - (a.servingTimestamp || a.timestamp)).slice(0, 5);
+            recentListEl.innerHTML = recentCustomers.map(c => `<li class="flex justify-between items-center text-lg p-2 rounded-lg"><span class="font-bold text-xl">${c.tokenNumber}</span><span>${escapeHtml(c.customerName)}</span><span class="text-sm ${c.status === 'Missed' ? 'text-orange-400' : 'text-gray-400'}">${c.status}</span></li>`).join('').repeat(2);
             recentListEl.classList.toggle('animate-scroll-up', recentCustomers.length > 3);
 
-            // Update Marquee
             const marqueeCustomers = waitingCustomers;
-            if (servingCustomer) { marqueeCustomers.unshift(servingCustomer); }
-            const marqueeHTML = marqueeCustomers.map(c => `
-                <span class="marquee-item">
-                    <span class="font-bold text-indigo-400">${c.tokenNumber}</span>: ${escapeHtml(c.customerName)} 
-                    <span class="text-yellow-400">(${c.status})</span>
-                </span>
-            `).join('') || `<span class="marquee-item">Welcome!</span>`;
-
-            // Adding duplicates to ensure smooth looping for the marquee
-            marqueeTextEl.innerHTML = marqueeHTML + marqueeHTML; 
+            if (servingCustomer) marqueeCustomers.unshift(servingCustomer);
+            marqueeTextEl.innerHTML = (marqueeCustomers.map(c => `<span class="marquee-item"><span class="font-bold text-indigo-400">${c.tokenNumber}</span>: ${escapeHtml(c.customerName)} <span class="text-yellow-400">(${c.status})</span></span>`).join('') || `<span class="marquee-item">Welcome!</span>`).repeat(2);
             marqueeTextEl.classList.add('animate-marquee');
-        }
-
-        // --- ETA and Autopilot Logic ---
-        function calculateAllEtas(currentQueue) {
-            const now = new Date().getTime() + serverTimeOffset;
-            const avgServiceTime = autopilotConfig.serviceTime;
-
-            const servingCustomer = currentQueue.find(c => c.status === 'Serving');
-            let nextAvailableTime = now;
-
-            if (servingCustomer && servingCustomer.servingTimestamp) {
-                const estimatedEndTime = servingCustomer.servingTimestamp + avgServiceTime;
-                nextAvailableTime = Math.max(now, estimatedEndTime);
-            }
-            
-            const waitingCustomers = currentQueue.filter(c => c.status === 'Waiting').sort((a,b) => {
-                 if (a.priority === 'high' && b.priority !== 'high') return -1;
-                 if (b.priority === 'high' && a.priority !== 'high') return 1;
-                 return a.tokenNumber - b.tokenNumber;
-            });
-            
-            let updates = {};
-            const today = getTodayDateString();
-            waitingCustomers.forEach(customer => {
-                const currentEta = customer.eta;
-                // Only update if ETA is not set or has changed significantly (e.g., by more than 10 seconds)
-                if (!currentEta || Math.abs(currentEta - nextAvailableTime) > 10000) {
-                    updates[`/queues/${today}/${customer.key}/eta`] = nextAvailableTime;
-                }
-                nextAvailableTime += avgServiceTime;
-            });
-
-            if (Object.keys(updates).length > 0) {
-                db.ref().update(updates).catch(error => console.error("Error updating ETAs:", error));
-            }
-        }
-
-        function updateCustomerStatus(customerKey, newStatus) {
-            const today = getTodayDateString();
-            const updateData = { status: newStatus };
-            if (newStatus === 'Serving') {
-                updateData.servingTimestamp = new Date().getTime() + serverTimeOffset;
-            } else {
-                updateData.servingTimestamp = null;
-            }
-            return db.ref(`queues/${today}/${customerKey}`).update(updateData);
-        }
-
-        function handleServeNextCustomer() {
-            const waitingCustomers = globalQueue.filter(c => c.status === 'Waiting').sort((a, b) => {
-                if (a.priority === 'high' && b.priority !== 'high') return -1;
-                if (b.priority === 'high' && a.priority !== 'high') return 1;
-                return a.tokenNumber - b.tokenNumber;
-            });
-            if (waitingCustomers.length > 0) {
-                updateCustomerStatus(waitingCustomers[0].key, 'Serving');
-            }
-        }
-
-        function runAutopilotCheck() {
-            if (!autopilotConfig.enabled) return;
-
-            const now = new Date().getTime() + serverTimeOffset;
-            const serviceDurationMs = autopilotConfig.serviceTime;
-            const servingCustomers = globalQueue.filter(c => c.status === 'Serving');
-
-            if (servingCustomers.length > 0) {
-                const servingCustomer = servingCustomers[0];
-                const servingTime = servingCustomer.servingTimestamp;
-
-                if (servingTime && (now - servingTime >= serviceDurationMs)) {
-                    const waitingCustomers = globalQueue.filter(c => c.status === 'Waiting').sort((a, b) => {
-                        if (a.priority === 'high' && b.priority !== 'high') return -1;
-                        if (b.priority === 'high' && a.priority !== 'high') return 1;
-                        return a.tokenNumber - b.tokenNumber;
-                    });
-                    
-                    const updates = {};
-                    const today = getTodayDateString();
-
-                    servingCustomers.forEach(cust => {
-                        updates[`/queues/${today}/${cust.key}/status`] = 'Completed';
-                        updates[`/queues/${today}/${cust.key}/servingTimestamp`] = null;
-                    });
-
-                    if (waitingCustomers.length > 0) {
-                        const nextCustomer = waitingCustomers[0];
-                        updates[`/queues/${today}/${nextCustomer.key}/status`] = 'Serving';
-                        updates[`/queues/${today}/${nextCustomer.key}/servingTimestamp`] = new Date().getTime() + serverTimeOffset;
-                    }
-                    
-                    if (Object.keys(updates).length > 0) {
-                        db.ref().update(updates);
-                    }
-                }
-            } else {
-                const isAnyoneWaiting = globalQueue.some(c => c.status === 'Waiting');
-                if (isAnyoneWaiting) {
-                    handleServeNextCustomer();
-                }
-            }
         }
 
         function setMuteState(shouldMute) {
             isMuted = shouldMute;
             document.getElementById('unmuted-icon').classList.toggle('hidden', isMuted);
             document.getElementById('muted-icon').classList.toggle('hidden', !isMuted);
-
             audioPlayer.muted = isMuted;
-
             if (ytPlayer && typeof ytPlayer.mute === 'function') {
-                if (isMuted) {
-                    ytPlayer.mute();
-                } else {
-                    ytPlayer.unMute();
-                }
+                if (isMuted) ytPlayer.mute(); else ytPlayer.unMute();
             }
-
-            if (isMuted) {
-                speechSynthesis.cancel();
-            }
+            if (isMuted) speechSynthesis.cancel();
         }
 
-        // --- YouTube Player Logic ---
         window.onYouTubeIframeAPIReady = function() {
-            // This function is called when the API is ready.
-            // Player will be initialized on demand.
+            isApiReady = true; 
         };
 
-        function initializeYouTubePlayer(videoId) {
-            // Destroy the old player if it exists, to ensure new settings are applied
+        function createYouTubePlayer(newState) {
             if (ytPlayer && typeof ytPlayer.destroy === 'function') {
-                ytPlayer.destroy();
+                try {
+                    ytPlayer.destroy();
+                } catch (e) { console.warn("Error destroying previous player:", e); }
                 ytPlayer = null;
             }
+            
+            if (!newState || !newState.videoIds || newState.videoIds.length === 0) {
+                 setView(globalQueue.some(c => ['Serving', 'Waiting'].includes(c.status)) ? 'token_only' : 'home');
+                 return;
+            }
+
+            const playerVars = { 
+                'autoplay': 1, 'controls': 0, 'rel': 0, 'showinfo': 0, 
+                'modestbranding': 1, 'loop': 0, 'mute': 1,
+                'suggestedQuality': newState.quality || 'default',
+                'playlist': newState.videoIds.join(',')
+            };
+
             ytPlayer = new YT.Player('youtube-player', {
                 height: '100%',
                 width: '100%',
-                videoId: videoId,
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'rel': 0,
-                    'showinfo': 0,
-                    'modestbranding': 1,
-                    'loop': 1,
-                    'playlist': videoId, // Required for looping
-                    'mute': 1 // Always start muted to guarantee autoplay
-                },
+                playerVars: playerVars,
                 events: {
                     'onReady': (event) => {
-                        event.target.playVideo();
+                        if (newState.currentIndex >= 0) {
+                            event.target.playVideoAt(newState.currentIndex);
+                        }
                         if (!isMuted) {
                             event.target.unMute();
                         }
+                        event.target.setVolume(newState.volume || 80);
                     },
                     'onStateChange': (event) => {
-                        if (event.data === YT.PlayerState.PLAYING) {
-                            loadingOverlay.classList.add('hidden');
-                        }
-                        // If for some reason it gets cued, we play it.
-                        if (event.data === YT.PlayerState.CUED) {
-                             event.target.playVideo();
-                        }
+                         if (event.data === YT.PlayerState.ENDED) {
+                             const state = currentYtState;
+                             if (state.repeatMode === 'one') {
+                                 event.target.seekTo(0);
+                             } else if (state.repeatMode === 'playlist') {
+                                 // The playlist parameter in playerVars handles this automatically
+                             } else {
+                                 // If not repeating and it's the last video, consider stopping.
+                                 const currentIdx = event.target.getPlaylistIndex();
+                                 const playlistSize = event.target.getPlaylist()?.length || 0;
+                                 if (currentIdx === playlistSize - 1) {
+                                     // This was the last video. The reception panel will decide what to do next.
+                                 }
+                             }
+                         }
                     }
                 }
             });
+            currentYtState = JSON.parse(JSON.stringify(newState)); // Deep copy
         }
 
-        // --- Initialization ---
+        function syncYouTubePlayer(newState) {
+            if (!isApiReady || !newState) return;
+        
+            const hasContent = (newState.videoIds && newState.videoIds.length > 0);
+        
+            // --- Player Creation / Destruction Logic ---
+            if (!ytPlayer && hasContent) {
+                createYouTubePlayer(newState);
+                return;
+            }
+            if (ytPlayer && !hasContent) {
+                if(typeof ytPlayer.destroy === 'function') ytPlayer.destroy();
+                ytPlayer = null;
+                currentYtState = {};
+                setView(globalQueue.some(c => ['Serving', 'Waiting'].includes(c.status)) ? 'token_only' : 'home');
+                return;
+            }
+            if (!ytPlayer) return;
+        
+            // --- Player Update Logic ---
+            try {
+                const newPlaylistIds = newState.videoIds || [];
+                const oldPlaylistIds = currentYtState.videoIds || [];
+        
+                const playlistChanged = JSON.stringify(newPlaylistIds) !== JSON.stringify(oldPlaylistIds);
+        
+                if (playlistChanged) {
+                    const playerState = ytPlayer.getPlayerState();
+                    const isPlaying = playerState === YT.PlayerState.PLAYING || playerState === YT.PlayerState.BUFFERING;
+                    // Check if we are just appending videos to the playlist
+                    const isAppending = newPlaylistIds.length > oldPlaylistIds.length && 
+                                        newPlaylistIds.slice(0, oldPlaylistIds.length).every((v, i) => v === oldPlaylistIds[i]);
+                    
+                    if (isPlaying && isAppending) {
+                        // To avoid interruption, we reload the playlist but continue from the current video's time
+                        const currentTime = ytPlayer.getCurrentTime();
+                        const currentPlaylistIndexOnPlayer = ytPlayer.getPlaylistIndex();
+
+                        // Only seek if the currently playing video is the one we expect.
+                        // If the user manually changed video on the TV, we respect the reception panel's index.
+                        if (currentPlaylistIndexOnPlayer === currentYtState.currentIndex) {
+                            ytPlayer.loadPlaylist(newPlaylistIds, currentYtState.currentIndex, currentTime);
+                        } else {
+                            ytPlayer.loadPlaylist(newPlaylistIds, newState.currentIndex);
+                        }
+                    } else {
+                        // For any other change (remove, reorder, new playlist), load it fresh.
+                        ytPlayer.loadPlaylist(newPlaylistIds, newState.currentIndex);
+                    }
+                } else if (newState.currentIndex !== currentYtState.currentIndex) {
+                    // If only the index changed within the same playlist, just play that video
+                    ytPlayer.playVideoAt(newState.currentIndex);
+                }
+        
+                // Sync Play/Pause state
+                const playerStatus = ytPlayer.getPlayerState();
+                if (newState.isPlaying && playerStatus !== YT.PlayerState.PLAYING && playerStatus !== YT.PlayerState.BUFFERING) {
+                    ytPlayer.playVideo();
+                } else if (!newState.isPlaying && playerStatus === YT.PlayerState.PLAYING) {
+                    ytPlayer.pauseVideo();
+                }
+        
+                // Sync Volume
+                if (newState.volume !== currentYtState.volume && ytPlayer.getVolume() !== newState.volume) {
+                    ytPlayer.setVolume(newState.volume);
+                }
+        
+                // Sync Quality
+                if (newState.quality !== currentYtState.quality) {
+                     ytPlayer.setPlaybackQuality(newState.quality);
+                }
+                
+            } catch (e) {
+                console.error("Error syncing YT Player. Re-creating on next update.", e);
+                if(ytPlayer && typeof ytPlayer.destroy === 'function') ytPlayer.destroy();
+                ytPlayer = null;
+            }
+        
+            currentYtState = JSON.parse(JSON.stringify(newState)); // Update state cache
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                }
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                 db = firebase.database();
                 audioPlayer = document.getElementById('music-player');
                 audioPlayer.volume = 0.8;
-                const nowPlayingBanner = document.getElementById('now-playing-banner');
-                const nowPlayingText = document.getElementById('now-playing-text');
+                document.getElementById('mute-btn').addEventListener('click', () => setMuteState(!isMuted));
 
-                const muteBtn = document.getElementById('mute-btn');
-                muteBtn.addEventListener('click', () => {
-                    setMuteState(!isMuted);
-                });
-                
-                tvVideoPlayer.addEventListener('playing', () => {
-                    loadingOverlay.classList.add('hidden');
-                });
+                clockInterval = setInterval(() => {
+                    if(clockEl) clockEl.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
+                }, 1000);
                 
                 const today = getTodayDateString();
                 const queueRef = db.ref(`queues/${today}`);
                 const mediaRef = db.ref(`mediaControls/${today}`);
-                const autopilotRef = db.ref(`autopilotConfig/${today}`);
+                const smartTvControlsRef = db.ref(`smartTvControls/${today}`);
                 const videoPlayerRef = db.ref(`videoPlayer/${today}`);
 
                 db.ref('.info/serverTimeOffset').on('value', (snap) => {
-                    serverTimeOffset = snap.val() || 0; 
-                    
-                    queueRef.off();
+                    serverTimeOffset = snap.val() || 0;
                     queueRef.on('value', (snapshot) => {
                         const data = snapshot.val() || {};
-                        const queue = Object.keys(data).map(key => ({ key, ...data[key] }));
-                        globalQueue = queue;
-                        calculateAllEtas(queue);
-                        updateDisplay(queue);
-                    }, (error) => {
-                        console.error("Firebase read failed:", error.code);
-                        noServingMessageEl.textContent = "Error: Connection lost.";
+                        globalQueue = Object.keys(data).map(key => ({ key, ...data[key] }));
+                        updateDisplay(globalQueue);
                     });
+                });
+                
+                // Fetch initial state first, then listen for changes
+                smartTvControlsRef.once('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && isApiReady) {
+                        lastSmartTvCommandTimestamp = data.timestamp || 0;
+                        if (data.command === 'set_layout' && data.layout) setView(data.layout);
+                        if (data.state) syncYouTubePlayer(data.state);
+                    }
 
-                    autopilotRef.off();
-                    autopilotRef.on('value', (snapshot) => {
-                        const config = snapshot.val() || { enabled: false, serviceTime: 5 * 60 * 1000 };
-                        autopilotConfig = config;
-                        if (autopilotInterval) {
-                            clearInterval(autopilotInterval);
-                            autopilotInterval = null;
-                        }
-                        if (config.enabled) {
-                            runAutopilotCheck(); // Run once immediately
-                            autopilotInterval = setInterval(runAutopilotCheck, 5000);
+                    smartTvControlsRef.on('value', (snapshot) => {
+                        if (!snapshot.exists()) return;
+                        const data = snapshot.val();
+                        if (data && typeof data === 'object' && data.timestamp && data.timestamp > lastSmartTvCommandTimestamp) {
+                            lastSmartTvCommandTimestamp = data.timestamp;
+                            switch (data.command) {
+                                case 'set_layout':
+                                    if (data.layout) setView(data.layout);
+                                    break;
+                                case 'update_player_state':
+                                    if (data.state) syncYouTubePlayer(data.state);
+                                    break;
+                            }
                         }
                     });
-
-                }, (error) => {
-                    console.error("Could not get server time offset.", error);
-                    noServingMessageEl.textContent = "Error: Could not sync time.";
+                });
+                
+                 videoPlayerRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !data.command) return;
+                    setView('local_video');
+                    if (data.videoUrl && tvVideoPlayer.src !== data.videoUrl) {
+                        tvVideoPlayer.src = data.videoUrl;
+                    }
+                    if (data.command === 'play') tvVideoPlayer.play();
                 });
 
                 mediaRef.on('value', (snapshot) => {
                     if (!snapshot.exists()) return;
                     const data = snapshot.val();
-
-                    if (typeof data.volume === 'number' && audioPlayer.volume !== data.volume) {
-                        audioPlayer.volume = data.volume;
-                    }
-
+                    if (typeof data.volume === 'number' && audioPlayer.volume !== data.volume) audioPlayer.volume = data.volume;
                     if (data.timestamp && data.timestamp > lastMediaCommandTimestamp) {
                         lastMediaCommandTimestamp = data.timestamp;
-                        if (data.trackUrl && audioPlayer.src !== data.trackUrl) {
-                            audioPlayer.src = data.trackUrl;
-                            nowPlayingText.textContent = `Now Playing: ${escapeHtml(data.trackName)}`;
-                        }
-                        switch (data.command) {
-                            case 'play':
-                                if (audioPlayer.src && !isMuted) {
-                                    audioPlayer.play().catch(e => console.error("Audio play failed:", e));
-                                    nowPlayingBanner.classList.remove('hidden');
-                                    nowPlayingBanner.classList.remove('translate-y-full');
-                                }
-                                break;
-                            case 'pause':
-                                audioPlayer.pause();
-                                nowPlayingBanner.classList.add('translate-y-full');
-                                setTimeout(() => nowPlayingBanner.classList.add('hidden'), 300);
-                                break;
-                            case 'stop':
-                                audioPlayer.pause();
-                                audioPlayer.src = '';
-                                nowPlayingBanner.classList.add('translate-y-full');
-                                setTimeout(() => nowPlayingBanner.classList.add('hidden'), 300);
-                                break;
-                            case 'canned_announcement':
-                                if (data.name) {
-                                    playCannedAnnouncement(data.name);
-                                }
-                                break;
-                        }
+                        if (data.trackUrl && audioPlayer.src !== data.trackUrl) audioPlayer.src = data.trackUrl;
+                        if (data.command === 'play' && audioPlayer.src && !isMuted) audioPlayer.play().catch(e => {});
+                        else if (data.command === 'pause' || data.command === 'stop') audioPlayer.pause();
                     }
                 });
-
-                videoPlayerRef.on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    if (!data) return;
-
-                    switch (data.command) {
-                        case 'play':
-                            loadingOverlay.classList.remove('hidden');
-                            // Handles both initial play for LOCAL video and RESUMING for ANY video.
-                            if (data.videoUrl) { // This is an initial play command for a local video
-                                youtubeOverlay.classList.add('hidden');
-                                if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
-                                tokenDisplayContainer.classList.add('hidden');
-                                videoOverlay.classList.remove('hidden');
-                                if (tvVideoPlayer.src !== data.videoUrl) {
-                                    tvVideoPlayer.src = data.videoUrl;
-                                }
-                                tvVideoPlayer.play();
-                            } else { // This is a resume command
-                                if (!youtubeOverlay.classList.contains('hidden')) {
-                                    // If YouTube overlay is visible, play the YouTube video
-                                    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-                                        ytPlayer.playVideo();
-                                    }
-                                } else if (!videoOverlay.classList.contains('hidden')) {
-                                    // If local video overlay is visible, play the local video
-                                    tvVideoPlayer.play();
-                                }
-                            }
-                            break;
-                        case 'play_youtube':
-                             loadingOverlay.classList.remove('hidden');
-                             videoOverlay.classList.add('hidden');
-                             tvVideoPlayer.pause();
-                             tokenDisplayContainer.classList.add('hidden');
-                             youtubeOverlay.classList.remove('hidden');
-                             initializeYouTubePlayer(data.videoId);
-                             break;
-                        case 'pause':
-                            tvVideoPlayer.pause();
-                            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
-                            break;
-                        case 'stop':
-                            loadingOverlay.classList.add('hidden');
-                            tvVideoPlayer.pause();
-                            tvVideoPlayer.src = '';
-                            videoOverlay.classList.add('hidden');
-                            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
-                            youtubeOverlay.classList.add('hidden');
-                            tokenDisplayContainer.classList.remove('hidden');
-                            break;
-                        case 'set_mute':
-                            if (typeof data.isMuted === 'boolean') {
-                                setMuteState(data.isMuted);
-                            }
-                            break;
-                    }
-                });
-
 
             } catch (e) {
                 console.error("Initialization failed:", e);
